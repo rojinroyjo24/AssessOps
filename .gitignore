@@ -1,0 +1,15 @@
+# Assessment Ops Mini Platform
+__pycache__/
+*.pyc
+node_modules/
+.env
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+pgdata/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
