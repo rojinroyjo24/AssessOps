@@ -61,7 +61,24 @@ def main():
     # Load events
     print(f"Loading data from: {data_file}")
     with open(data_file, 'r') as f:
-        events = json.load(f)
+        raw_events = json.load(f)
+    
+    # Transform nested structure to flat structure expected by API
+    events = []
+    for event in raw_events:
+        transformed = {
+            "event_id": event.get("source_event_id"),
+            "student_name": event.get("student", {}).get("full_name"),
+            "student_email": event.get("student", {}).get("email"),
+            "student_phone": event.get("student", {}).get("phone"),
+            "test_id": event.get("test", {}).get("name", "").replace(" ", "-").lower(),
+            "test_name": event.get("test", {}).get("name"),
+            "started_at": event.get("started_at"),
+            "submitted_at": event.get("submitted_at"),
+            "answers": event.get("answers", {}),
+            "channel": event.get("channel", "unknown")
+        }
+        events.append(transformed)
     
     print(f"Found {len(events)} events to ingest")
     print(f"Sending to: {ingest_url}")
